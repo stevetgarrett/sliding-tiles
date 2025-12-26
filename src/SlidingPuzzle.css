@@ -26,6 +26,35 @@ h1 {
   margin: 5px 0;
 }
 
+.image-controls {
+  margin-bottom: 20px;
+}
+
+.upload-button,
+.clear-button {
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.upload-button:hover,
+.clear-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.upload-button:active,
+.clear-button:active {
+  transform: translateY(0);
+}
+
 .win-message {
   font-size: 1.5rem;
   font-weight: bold;
@@ -71,6 +100,15 @@ h1 {
 .tile.empty {
   background: transparent;
   box-shadow: none;
+}
+
+.tile.image-tile {
+  background-size: 400%;
+  font-size: 0;
+}
+
+.tile.image-tile.movable {
+  background-blend-mode: normal;
 }
 
 .tile.movable {

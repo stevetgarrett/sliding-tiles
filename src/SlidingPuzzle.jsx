@@ -42,6 +42,7 @@ const SlidingPuzzle = () => {
   const [tiles, setTiles] = useState(initializePuzzle);
   const [moves, setMoves] = useState(0);
   const [isWon, setIsWon] = useState(false);
+  const [uploadedImage, setUploadedImage] = useState(null);
 
   // Check if puzzle is solved
   const checkWin = (currentTiles) => {
@@ -75,6 +76,38 @@ const SlidingPuzzle = () => {
     setIsWon(false);
   };
 
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setUploadedImage(e.target.result);
+        resetGame();
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const clearImage = () => {
+    setUploadedImage(null);
+    resetGame();
+  };
+
+  const getTileStyle = (tile, index) => {
+    if (tile === 0 || !uploadedImage) return {};
+    
+    const row = Math.floor(index / GRID_SIZE);
+    const col = index % GRID_SIZE;
+    const tileRow = Math.floor((tile - 1) / GRID_SIZE);
+    const tileCol = (tile - 1) % GRID_SIZE;
+    
+    return {
+      backgroundImage: `url(${uploadedImage})`,
+      backgroundSize: '400%',
+      backgroundPosition: `${tileCol * 33.333}% ${tileRow * 33.333}%`,
+    };
+  };
+
   return (
     <div className="puzzle-container">
       <h1>Sliding Puzzle</h1>
@@ -82,16 +115,34 @@ const SlidingPuzzle = () => {
         <p>Moves: {moves}</p>
         {isWon && <p className="win-message">🎉 Congratulations! You won! 🎉</p>}
       </div>
+      <div className="image-controls">
+        {!uploadedImage ? (
+          <label className="upload-button">
+            📷 Upload Photo
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              style={{ display: 'none' }}
+            />
+          </label>
+        ) : (
+          <button className="clear-button" onClick={clearImage}>
+            ✕ Clear Photo
+          </button>
+        )}
+      </div>
       <div className="puzzle-grid">
         {tiles.map((tile, index) => (
           <div
             key={index}
             className={`tile ${tile === 0 ? 'empty' : ''} ${
               getValidMoves(tiles.indexOf(0)).includes(index) ? 'movable' : ''
-            }`}
+            } ${uploadedImage ? 'image-tile' : ''}`}
             onClick={() => handleTileClick(index)}
+            style={getTileStyle(tile, index)}
           >
-            {tile !== 0 && tile}
+            {tile !== 0 && !uploadedImage && tile}
           </div>
         ))}
       </div>
