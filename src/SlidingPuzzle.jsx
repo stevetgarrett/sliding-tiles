@@ -101,10 +101,14 @@ const SlidingPuzzle = () => {
     const tileRow = Math.floor((tile - 1) / GRID_SIZE);
     const tileCol = (tile - 1) % GRID_SIZE;
     
+    // Each tile is 1/GRID_SIZE of the total image
+    // backgroundSize makes the image GRID_SIZE times larger than a single tile
+    // backgroundPosition shifts the image so the correct portion shows in this tile
+    // Formula: position = -(tilePosition * 100%)
     return {
       backgroundImage: `url(${uploadedImage})`,
-      backgroundSize: '400%',
-      backgroundPosition: `${tileCol * 33.333}% ${tileRow * 33.333}%`,
+      backgroundSize: `${GRID_SIZE * 100}% ${GRID_SIZE * 100}%`,
+      backgroundPosition: `${-tileCol * 100}% ${-tileRow * 100}%`,
     };
   };
 
